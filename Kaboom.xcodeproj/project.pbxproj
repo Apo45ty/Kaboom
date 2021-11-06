@@ -27,6 +27,7 @@
 		24995BB92736E85100589E17 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		24995BBB2736E85300589E17 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		24995BBE2736E85300589E17 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		24995BC52736E91C00589E17 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -43,6 +44,7 @@
 		24995BA22736E85100589E17 = {
 			isa = PBXGroup;
 			children = (
+				24995BC52736E91C00589E17 /* README.md */,
 				24995BAD2736E85100589E17 /* Kaboom */,
 				24995BAC2736E85100589E17 /* Products */,
 			);
