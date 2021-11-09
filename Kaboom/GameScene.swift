@@ -15,7 +15,8 @@ class GameScene: SKScene {
         let background = SKSpriteNode(imageNamed: "background_1")
         background.position = CGPoint(x: 0, y: 0)
         background.anchorPoint = CGPoint(x: 0, y: 0)
-        background.zPosition = Layer.background.rawValue/.          addChild(background)
+        background.zPosition = Layer.background.rawValue
+        addChild(background)
         
         let foreground = SKSpriteNode(imageNamed:  "foreground_1")
         foreground.anchorPoint = CGPoint(x: 0, y: 0)
