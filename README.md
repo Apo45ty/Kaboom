@@ -1,4 +1,5 @@
 #  An implementation of Kaboom
 
-Under the MIT License
-
+I coded this while following the book :
+Apple Game Frameworks and Technologies Build 2D Games with SpriteKit & Swift
+by Tammy Coron
