@@ -21,6 +21,8 @@ class GameScene: SKScene {
     var lastPosition : CGPoint?
     
     override func didMove(to view: SKView) {
+        physicsWorld.contactDelegate = self
+        
         let background = SKSpriteNode(imageNamed: "background_1")
         background.position = CGPoint(x: 0, y: 0)
         background.anchorPoint = CGPoint(x: 0, y: 0)
@@ -31,6 +33,11 @@ class GameScene: SKScene {
         foreground.anchorPoint = CGPoint(x: 0, y: 0)
         foreground.position = CGPoint(x: 0, y: 0)
         foreground.zPosition = Layer.foreground.rawValue
+        foreground.physicsBody=SKPhysicsBody(edgeLoopFrom: foreground.frame)
+        foreground.physicsBody?.affectedByGravity=false
+        foreground.physicsBody?.categoryBitMask = PhysicsCategory.foreground
+        foreground.physicsBody?.contactTestBitMask = PhysicsCategory.collectible
+        foreground.physicsBody?.collisionBitMask = PhysicsCategory.none
         addChild(foreground)
         
         player.position = CGPoint(x: size.width/2, y: foreground.frame.maxY)
@@ -141,5 +148,37 @@ class GameScene: SKScene {
         
         run(repeatAction,withKey: "gloop")
         
+    }
+    
+    
+}
+//MARK:-COLLLISION DETECTIO
+extension GameScene : SKPhysicsContactDelegate{
+    func didBegin(_ contact: SKPhysicsContact) {
+        
+        let collision =  contact.bodyA.categoryBitMask | contact.bodyB.categoryBitMask
+        
+        if collision == PhysicsCategory.player | PhysicsCategory.collectible{
+             print("player hit collectable")
+            let body = contact.bodyA.categoryBitMask == PhysicsCategory.collectible ?
+            contact.bodyA:
+            contact.bodyB
+            
+            if let sprite = body as? Collectible{
+                sprite.collected()
+            }
+            
+        }
+        if collision == PhysicsCategory.foreground | PhysicsCategory.collectible{
+            print("collectable hit ground")
+            let body = contact.bodyA.categoryBitMask == PhysicsCategory.collectible ?
+            contact.bodyA:
+            contact.bodyB
+            
+            
+            if let sprite = body as? Collectible{
+                sprite.missed()
+            }
+        }
     }
 }

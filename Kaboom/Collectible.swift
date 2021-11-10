@@ -32,6 +32,11 @@ class Collectible:SKSpriteNode{
         self.name = "co_\(collectibleType)"
         self.anchorPoint = CGPoint(x: 0.5, y: 1.0)
         self.zPosition = Layer.collectible.rawValue
+        self.physicsBody = SKPhysicsBody(rectangleOf: self.size, center: CGPoint(x: 0.0, y: -self.size.height/2.0))
+        self.physicsBody?.affectedByGravity=false
+        self.physicsBody?.categoryBitMask = PhysicsCategory.collectible
+        self.physicsBody?.contactTestBitMask = PhysicsCategory.player | PhysicsCategory.foreground
+        self.physicsBody?.collisionBitMask = PhysicsCategory.none
     }
     
     required init?(coder aDecoder:NSCoder){
@@ -50,5 +55,14 @@ class Collectible:SKSpriteNode{
         
         self.scale(to: CGSize(width: 0.25, height: 1.0))
         self.run(actionSequence,withKey: "drop")
+    }
+    
+    func collected(){
+        let removeFromParent = SKAction.removeFromParent()
+        self.run(removeFromParent)
+    }
+    func missed(){
+        let removeFromParent = SKAction.removeFromParent()
+        self.run(removeFromParent)
     }
 }

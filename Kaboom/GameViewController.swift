@@ -19,7 +19,7 @@ class GameViewController: UIViewController {
             scene.backgroundColor = UIColor(red: 105/255, green: 157/255, blue: 181/255, alpha: 1.0)
             view.presentScene(scene)
             view.ignoresSiblingOrder = false
-            view.showsPhysics=false
+            view.showsPhysics=true
             view.showsFPS=true
             view.showsNodeCount=true
             

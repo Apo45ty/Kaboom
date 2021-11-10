@@ -30,6 +30,7 @@
 		2499A827273B293C003025FF /* Player.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
 		2499A829273B2A65003025FF /* SpriteKitHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpriteKitHelper.swift; sourceTree = "<group>"; };
 		2499A82B273B4308003025FF /* Collectible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Collectible.swift; sourceTree = "<group>"; };
+		2499D770273C81F900D631F7 /* Nosifer-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Nosifer-Regular.ttf"; path = "../../../../../Downloads/code/AddingLabelsAndWorkingWithTheGameLoop/resources/Fonts/Nosifer-Regular.ttf"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -65,6 +66,7 @@
 			children = (
 				24995BAE2736E85100589E17 /* AppDelegate.swift */,
 				24995BB42736E85100589E17 /* GameScene.swift */,
+				2499D76F273C81CF00D631F7 /* Fonts */,
 				2499A82B273B4308003025FF /* Collectible.swift */,
 				24995BB62736E85100589E17 /* GameViewController.swift */,
 				24995BB82736E85100589E17 /* Main.storyboard */,
@@ -74,6 +76,14 @@
 				24995BBD2736E85300589E17 /* LaunchScreen.storyboard */,
 			);
 			path = Kaboom;
+			sourceTree = "<group>";
+		};
+		2499D76F273C81CF00D631F7 /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				2499D770273C81F900D631F7 /* Nosifer-Regular.ttf */,
+			);
+			path = Fonts;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
