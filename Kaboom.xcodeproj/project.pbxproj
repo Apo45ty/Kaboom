@@ -15,6 +15,7 @@
 		24995BBF2736E85300589E17 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 24995BBD2736E85300589E17 /* LaunchScreen.storyboard */; };
 		2499A828273B293C003025FF /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2499A827273B293C003025FF /* Player.swift */; };
 		2499A82A273B2A65003025FF /* SpriteKitHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2499A829273B2A65003025FF /* SpriteKitHelper.swift */; };
+		2499A82C273B4308003025FF /* Collectible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2499A82B273B4308003025FF /* Collectible.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +29,7 @@
 		24995BC52736E91C00589E17 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		2499A827273B293C003025FF /* Player.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
 		2499A829273B2A65003025FF /* SpriteKitHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpriteKitHelper.swift; sourceTree = "<group>"; };
+		2499A82B273B4308003025FF /* Collectible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Collectible.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -63,6 +65,7 @@
 			children = (
 				24995BAE2736E85100589E17 /* AppDelegate.swift */,
 				24995BB42736E85100589E17 /* GameScene.swift */,
+				2499A82B273B4308003025FF /* Collectible.swift */,
 				24995BB62736E85100589E17 /* GameViewController.swift */,
 				24995BB82736E85100589E17 /* Main.storyboard */,
 				24995BBB2736E85300589E17 /* Assets.xcassets */,
@@ -146,6 +149,7 @@
 			files = (
 				2499A828273B293C003025FF /* Player.swift in Sources */,
 				24995BB52736E85100589E17 /* GameScene.swift in Sources */,
+				2499A82C273B4308003025FF /* Collectible.swift in Sources */,
 				24995BB72736E85100589E17 /* GameViewController.swift in Sources */,
 				2499A82A273B2A65003025FF /* SpriteKitHelper.swift in Sources */,
 				24995BAF2736E85100589E17 /* AppDelegate.swift in Sources */,
