@@ -16,6 +16,7 @@
 		2499A828273B293C003025FF /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2499A827273B293C003025FF /* Player.swift */; };
 		2499A82A273B2A65003025FF /* SpriteKitHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2499A829273B2A65003025FF /* SpriteKitHelper.swift */; };
 		2499A82C273B4308003025FF /* Collectible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2499A82B273B4308003025FF /* Collectible.swift */; };
+		2499D772273C825C00D631F7 /* Nosifer-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2499D771273C825C00D631F7 /* Nosifer-Regular.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,7 +31,8 @@
 		2499A827273B293C003025FF /* Player.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
 		2499A829273B2A65003025FF /* SpriteKitHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpriteKitHelper.swift; sourceTree = "<group>"; };
 		2499A82B273B4308003025FF /* Collectible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Collectible.swift; sourceTree = "<group>"; };
-		2499D770273C81F900D631F7 /* Nosifer-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Nosifer-Regular.ttf"; path = "../../../../../Downloads/code/AddingLabelsAndWorkingWithTheGameLoop/resources/Fonts/Nosifer-Regular.ttf"; sourceTree = "<group>"; };
+		2499D771273C825C00D631F7 /* Nosifer-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Nosifer-Regular.ttf"; sourceTree = "<group>"; };
+		2499D773273C83C900D631F7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -64,6 +66,7 @@
 		24995BAD2736E85100589E17 /* Kaboom */ = {
 			isa = PBXGroup;
 			children = (
+				2499D773273C83C900D631F7 /* Info.plist */,
 				24995BAE2736E85100589E17 /* AppDelegate.swift */,
 				24995BB42736E85100589E17 /* GameScene.swift */,
 				2499D76F273C81CF00D631F7 /* Fonts */,
@@ -81,7 +84,7 @@
 		2499D76F273C81CF00D631F7 /* Fonts */ = {
 			isa = PBXGroup;
 			children = (
-				2499D770273C81F900D631F7 /* Nosifer-Regular.ttf */,
+				2499D771273C825C00D631F7 /* Nosifer-Regular.ttf */,
 			);
 			path = Fonts;
 			sourceTree = "<group>";
@@ -144,6 +147,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2499D772273C825C00D631F7 /* Nosifer-Regular.ttf in Resources */,
 				24995BBA2736E85100589E17 /* Main.storyboard in Resources */,
 				24995BBC2736E85300589E17 /* Assets.xcassets in Resources */,
 				24995BBF2736E85300589E17 /* LaunchScreen.storyboard in Resources */,
@@ -312,14 +316,15 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Kaboom/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UIRequiresFullScreen = YES;
 				INFOPLIST_KEY_UIStatusBarHidden = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -341,14 +346,15 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Kaboom/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UIRequiresFullScreen = YES;
 				INFOPLIST_KEY_UIStatusBarHidden = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

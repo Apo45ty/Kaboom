@@ -10,16 +10,19 @@ import SpriteKit
 
 enum PlayerAnimationType:String{
     case walk
+    case die
 }
 
 class Player : SKSpriteNode{
     //MARK:- PROPERTIES
     private var walkTextures:[SKTexture]?
+    private var dieTextures:[SKTexture]?
     //MARK:- INIT
     init(){
         let texture = SKTexture(imageNamed: "blob-walk_0")
         super.init(texture: texture, color: .clear, size: texture.size())
         self.walkTextures = self.loadTextures(atlas: "blob", prefix: "blob-walk_", startsAt: 0, stopsAt: 2)
+        self.dieTextures = self.loadTextures(atlas: "blob", prefix: "blob-die_", startsAt: 0, stopsAt: 0)
         self.name = "player"
         self.setScale(1.0)
         self.anchorPoint = CGPoint(x: 0.5, y: 0.0)
@@ -39,12 +42,20 @@ class Player : SKSpriteNode{
         let lockToPlatform = SKConstraint.positionY(range)
         constraints = [lockToPlatform]
     }
-    
+    func die(){
+        //Check for textures
+        guard let dieTextures = dieTextures else {
+            preconditionFailure("Could not find textures!")
+        }
+        removeAction(forKey: PlayerAnimationType.walk.rawValue)
+        startAnimation(textures: dieTextures, speed: 0.25, name: PlayerAnimationType.die.rawValue, count: 0, resize: true, restore: true)
+    }
     func walk(){
         //Check for textures
         guard let walkTextures = walkTextures else {
             preconditionFailure("Could not find textures!")
         }
+        removeAction(forKey: PlayerAnimationType.die.rawValue)
         // run animation
         startAnimation(textures: walkTextures, speed: 0.25, name: PlayerAnimationType.walk.rawValue, count: 0, resize: true, restore: true)
     }

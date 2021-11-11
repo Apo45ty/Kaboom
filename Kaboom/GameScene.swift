@@ -12,14 +12,27 @@ class GameScene: SKScene {
     
     let player = Player()
     let playerSpeed:CGFloat = 1.5
-    var level : Int = 1
+    var level : Int = 1{
+        didSet{
+            levelLable.text = "Level : \(level)"
+        }
+    }
+    var score: Int = 0{
+        didSet{
+            scoreLable.text = "Score : \(score)"
+        }
+    }
     var numberOfDrops : Int = 10
     var dropSpeed : CGFloat = 1.0
     var minDropSpeed : CGFloat = 0.12
     var maxDropSpeed:CGFloat=1.0
     var movingPlayer : Bool = false
     var lastPosition : CGPoint?
-    
+    var scoreLable : SKLabelNode = SKLabelNode()
+    var levelLable : SKLabelNode = SKLabelNode()
+    var gameInProgress = false
+    var dropsExpected = 10
+    var dropsCollected = 0
     override func didMove(to view: SKView) {
         physicsWorld.contactDelegate = self
         
@@ -45,13 +58,18 @@ class GameScene: SKScene {
         addChild(player)
         player.walk()
         
-        spawnMultipleGloop()
+        setupLabels()
         
+       
     }
     
     // MARK:-TOUCH HANDELING
     
     func touchDown(atPoint pos:CGPoint){
+        if !gameInProgress{
+            spawnMultipleGloop()
+            return
+        }
         let touchedNode = atPoint(pos)
         if(touchedNode.name == "player"){
             movingPlayer = true
@@ -105,6 +123,31 @@ class GameScene: SKScene {
         }
     }
     //MARK:-GAME FUNCTIONS
+    func setupLabels(){
+        scoreLable.name = "score"
+        scoreLable.fontName = "Nosifer"
+        scoreLable.fontColor = .yellow
+        scoreLable.fontSize = 35.0
+        scoreLable.horizontalAlignmentMode = .right
+        scoreLable.verticalAlignmentMode = .center
+        scoreLable.zPosition=Layer.ui.rawValue
+        scoreLable.position = CGPoint(x: frame.maxX - 50, y: viewTop()-100)
+        scoreLable.text = "Score : 0"
+        addChild(scoreLable)
+        
+        levelLable.name = "level"
+        levelLable.fontName = "Nosifer"
+        levelLable.fontColor = .yellow
+        levelLable.fontSize = 35.0
+        levelLable.horizontalAlignmentMode = .left
+        levelLable.verticalAlignmentMode = .center
+        levelLable.zPosition=Layer.ui.rawValue
+        levelLable.position = CGPoint(x: frame.minX + 50, y: viewTop()-100)
+        levelLable.text = "Level : \(level)"
+        addChild(levelLable)
+        
+    }
+    
     func spawnGloop(){
         let collectible = Collectible(collectibleType: CollectibleType.gloop)
         let margin = collectible.size.width * 2
@@ -115,7 +158,12 @@ class GameScene: SKScene {
         collectible.drop(dropSpeed: TimeInterval(1.0), floorLevel: player.frame.minY)
     }
     func spawnMultipleGloop(){
-        
+        player.walk()
+        if !gameInProgress{
+            score = 0
+            level = 1
+        }
+        gameInProgress = true
         switch level {
         case 1,2,3,4,5:
             numberOfDrops = level * 10
@@ -150,7 +198,41 @@ class GameScene: SKScene {
         
     }
     
-    
+    func gameOver (){
+        gameInProgress = false
+        resetPlayerPosition()
+        popRemainingDrops()
+        player.die()
+        removeAction(forKey: "gloop")
+        enumerateChildNodes(withName: "//co_*"){
+            (node,stop) in
+            node.removeAction(forKey: "drop")
+            node.physicsBody=nil
+        }
+    }
+    func resetPlayerPosition(){
+        let resetPoint = CGPoint(x: frame.midX, y: player.position.y)
+        let distance = hypot(resetPoint.x-player.position.x,0)
+        let calculateSpeed = TimeInterval(distance / (playerSpeed * 2)) / 255
+        if player.position.x > frame.midX {
+            player.moveToPosition(pos: resetPoint, direction: "L", speed: calculateSpeed)
+        } else{
+            player.moveToPosition(pos: resetPoint, direction: "R", speed: calculateSpeed)
+        }
+    }
+    func popRemainingDrops(){
+        var i = 0
+        enumerateChildNodes(withName: "//co_*"){
+            (node,stop) in
+            let initialWait = SKAction.wait(forDuration: 1.0)
+            let wait = SKAction.wait(forDuration: TimeInterval(0.15*CGFloat(i)))
+            let removeFromParent = SKAction.removeFromParent()
+            let actionSequence = SKAction.sequence([initialWait,wait,removeFromParent])
+            
+            node.run(actionSequence)
+            i+=1
+        }
+    }
 }
 //MARK:-COLLLISION DETECTIO
 extension GameScene : SKPhysicsContactDelegate{
@@ -161,23 +243,25 @@ extension GameScene : SKPhysicsContactDelegate{
         if collision == PhysicsCategory.player | PhysicsCategory.collectible{
              print("player hit collectable")
             let body = contact.bodyA.categoryBitMask == PhysicsCategory.collectible ?
-            contact.bodyA:
-            contact.bodyB
+            contact.bodyA.node:
+            contact.bodyB.node
             
             if let sprite = body as? Collectible{
                 sprite.collected()
+                score += level
             }
             
         }
         if collision == PhysicsCategory.foreground | PhysicsCategory.collectible{
             print("collectable hit ground")
             let body = contact.bodyA.categoryBitMask == PhysicsCategory.collectible ?
-            contact.bodyA:
-            contact.bodyB
+            contact.bodyA.node:
+            contact.bodyB.node
             
             
             if let sprite = body as? Collectible{
                 sprite.missed()
+                gameOver()
             }
         }
     }
