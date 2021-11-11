@@ -7,6 +7,7 @@
 
 import SpriteKit
 import GameplayKit
+import AVFoundation
 
 class GameScene: SKScene {
     
@@ -30,11 +31,26 @@ class GameScene: SKScene {
     var lastPosition : CGPoint?
     var scoreLable : SKLabelNode = SKLabelNode()
     var levelLable : SKLabelNode = SKLabelNode()
+    let musicAudioNode = SKAudioNode(fileNamed: "music.mp3")
     var gameInProgress = false
     var dropsExpected = 10
     var dropsCollected = 0
     override func didMove(to view: SKView) {
         physicsWorld.contactDelegate = self
+        
+        audioEngine.mainMixerNode.outputVolume = 0.0
+        
+        musicAudioNode.autoplayLooped = true
+        musicAudioNode.isPositional = false
+        addChild(musicAudioNode)
+        
+        musicAudioNode.run(SKAction.changeVolume(to: 0.0, duration: 0.0))
+        run(SKAction.wait(forDuration: 1.0),completion: {
+           [unowned self] in
+            self.audioEngine.mainMixerNode.outputVolume = 1.0
+            self.musicAudioNode.run(SKAction.changeVolume(to: 0.75, duration: 2.0))
+        })
+        
         
         let background = SKSpriteNode(imageNamed: "background_1")
         background.position = CGPoint(x: 0, y: 0)
@@ -59,7 +75,7 @@ class GameScene: SKScene {
         player.walk()
         
         setupLabels()
-        
+        showMessage("Tap to Start game")
        
     }
     
@@ -147,6 +163,33 @@ class GameScene: SKScene {
         addChild(levelLable)
         
     }
+    func showMessage(_ message : String){
+        let messageLable = SKLabelNode()
+        messageLable.name = "message"
+        messageLable.position = CGPoint(x: frame.midX, y: player.frame.maxY+100)
+        messageLable.zPosition = Layer.ui.rawValue
+        messageLable.numberOfLines=2
+        
+        let paragraph = NSMutableParagraphStyle()
+        paragraph.alignment = .center
+        let attributes:[NSAttributedString.Key:Any] = [
+            .foregroundColor : SKColor(red: 251.0/255.0, green: 155.0/255.0, blue: 24.0/255.0, alpha: 1.0 ),
+            .backgroundColor : UIColor.clear,
+            .font:UIFont(name: "Nosifer", size: 45.0)!,
+            .paragraphStyle : paragraph
+        ]
+        
+        messageLable.attributedText = NSAttributedString(string: message, attributes: attributes)
+        
+        messageLable.run(SKAction.fadeIn(withDuration: 0.25))
+        addChild(messageLable)
+    }
+    
+    func hideMessage(){
+        if let messageLable = childNode(withName: "//message") as? SKLabelNode{
+            messageLable.run(SKAction.sequence([SKAction.fadeOut(withDuration: 0.25),SKAction.removeFromParent()]))
+        }
+    }
     
     func spawnGloop(){
         let collectible = Collectible(collectibleType: CollectibleType.gloop)
@@ -159,6 +202,7 @@ class GameScene: SKScene {
     }
     func spawnMultipleGloop(){
         player.walk()
+        hideMessage()
         if !gameInProgress{
             score = 0
             level = 1
@@ -176,6 +220,9 @@ class GameScene: SKScene {
         default:
             numberOfDrops = 150
         }
+        
+        dropsCollected = 0
+        dropsExpected=numberOfDrops
         
         
         dropSpeed = 1 / ( CGFloat(level) + ( CGFloat(level) / CGFloat(numberOfDrops) ) )
@@ -199,6 +246,7 @@ class GameScene: SKScene {
     }
     
     func gameOver (){
+        showMessage("Game over\nTap to try again")
         gameInProgress = false
         resetPlayerPosition()
         popRemainingDrops()
@@ -233,6 +281,19 @@ class GameScene: SKScene {
             i+=1
         }
     }
+    func checkForRemainingDrops(){
+        if dropsCollected == dropsExpected{
+            nextLevel()
+        }
+    }
+    func nextLevel(){
+        showMessage("Get Ready")
+        let wait = SKAction.wait(forDuration: 2.25)
+        run(wait,completion:{
+            [unowned self] in self.level+=1
+        })
+        self.spawnMultipleGloop()
+    }
 }
 //MARK:-COLLLISION DETECTIO
 extension GameScene : SKPhysicsContactDelegate{
@@ -249,6 +310,8 @@ extension GameScene : SKPhysicsContactDelegate{
             if let sprite = body as? Collectible{
                 sprite.collected()
                 score += level
+                dropsCollected += 1
+                checkForRemainingDrops()
             }
             
         }
