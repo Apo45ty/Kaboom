@@ -59,6 +59,13 @@ class Player : SKSpriteNode{
         // run animation
         startAnimation(textures: walkTextures, speed: 0.25, name: PlayerAnimationType.walk.rawValue, count: 0, resize: true, restore: true)
     }
+    
+    func mumble(){
+        let random = Int.random(in: 1...3)
+        let playSound = SKAction.playSoundFileNamed("blob_mumble-\(random)", waitForCompletion: true)
+        self.run(playSound,withKey: "mumble")
+    }
+    
     func moveToPosition(pos:CGPoint,direction:String,speed:TimeInterval){
         switch direction{
         case "L":

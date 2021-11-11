@@ -11,6 +11,7 @@ import AVFoundation
 
 class GameScene: SKScene {
     
+    var prevDropLocation : CGFloat = 0.0
     let player = Player()
     let playerSpeed:CGFloat = 1.5
     var level : Int = 1{
@@ -52,12 +53,17 @@ class GameScene: SKScene {
             self.musicAudioNode.run(SKAction.changeVolume(to: 0.75, duration: 2.0))
         })
         
-         
+        run(SKAction.wait(forDuration: 1.5),completion: {
+            [unowned self] in
+            self.bubblesAudioNode.autoplayLooped = true
+            self.addChild(self.bubblesAudioNode)
+        })
         
         let background = SKSpriteNode(imageNamed: "background_1")
         background.position = CGPoint(x: 0, y: 0)
         background.anchorPoint = CGPoint(x: 0, y: 0)
         background.zPosition = Layer.background.rawValue
+        background.name = "background"
         addChild(background)
         
         let foreground = SKSpriteNode(imageNamed:  "foreground_1")
@@ -69,6 +75,7 @@ class GameScene: SKScene {
         foreground.physicsBody?.categoryBitMask = PhysicsCategory.foreground
         foreground.physicsBody?.contactTestBitMask = PhysicsCategory.collectible
         foreground.physicsBody?.collisionBitMask = PhysicsCategory.none
+        foreground.name = "foreground"
         addChild(foreground)
         
         player.position = CGPoint(x: size.width/2, y: foreground.frame.maxY)
@@ -79,6 +86,8 @@ class GameScene: SKScene {
         setupLabels()
         showMessage("Tap to Start game")
         setupGloopFlow()
+        
+        
     }
     
     // MARK:-TOUCH HANDELING
@@ -88,10 +97,14 @@ class GameScene: SKScene {
             spawnMultipleGloop()
             return
         }
-        let touchedNode = atPoint(pos)
-        if(touchedNode.name == "player"){
-            movingPlayer = true
+        let touchedNodes = nodes(at:pos)
+        
+        for touchedNode in touchedNodes{
+            if(touchedNode.name == "player"){
+                movingPlayer = true
+            }
         }
+
 //        let distance = hypot(pos.x-player.position.x, pos.y-player.position.y)
 //        let calculateSpeed = TimeInterval(distance/playerSpeed) / 255
 //
@@ -197,12 +210,47 @@ class GameScene: SKScene {
         let collectible = Collectible(collectibleType: CollectibleType.gloop)
         let margin = collectible.size.width * 2
         let dropRange = SKRange(lowerLimit: frame.minX+margin,upperLimit: frame.maxX-margin)
-        let randomX = CGFloat.random(in: dropRange.lowerLimit...dropRange.upperLimit)
+        var randomX = CGFloat.random(in: dropRange.lowerLimit...dropRange.upperLimit)
+        
+        let randomModifier = SKRange(lowerLimit: 50+CGFloat(level), upperLimit: 60*CGFloat(level))
+        var modifier = CGFloat.random(in: randomModifier.lowerLimit...randomModifier.upperLimit)
+        
+        if modifier > 400 { modifier = 400}
+        
+        if prevDropLocation == 0.0 {
+            prevDropLocation = randomX
+        }
+        
+        if prevDropLocation < randomX {
+            randomX = prevDropLocation + modifier
+        } else {
+            randomX = prevDropLocation - modifier
+        }
+        
+        if randomX <= (frame.minX+margin) {
+            randomX = frame.minX+margin
+        } else if randomX > frame.maxX-margin{
+            randomX = frame.maxX-margin
+        }
+        
+        prevDropLocation = randomX
+        
         collectible.position=CGPoint(x: randomX, y: player.position.y*2.5)
+        
+        let xLable = SKLabelNode()
+        xLable.name = "dropNumber"
+        xLable.fontName = "AvenirNext-DemiBold"
+        xLable.fontColor = UIColor.yellow
+        xLable.fontSize = 22.0
+        xLable.text = "\(numberOfDrops)"
+        xLable.position = CGPoint(x: 0, y: 2)
+        collectible.addChild(xLable)
+        numberOfDrops-=1
         addChild(collectible)
         collectible.drop(dropSpeed: TimeInterval(1.0), floorLevel: player.frame.minY)
     }
     func spawnMultipleGloop(){
+        player.mumble()
         player.walk()
         hideMessage()
         if !gameInProgress{
@@ -284,7 +332,7 @@ class GameScene: SKScene {
         }
     }
     func checkForRemainingDrops(){
-        if dropsCollected == dropsExpected{
+if dropsCollected == dropsExpected{
             nextLevel()
         }
     }
@@ -303,7 +351,7 @@ class GameScene: SKScene {
         gloopFlow.zPosition = Layer.foreground.rawValue
         gloopFlow.position = CGPoint(x: 0.0, y: -60.0)
         
-        gloopFlow.setupScrollingView(imageNamed: "flow_1", layer: Layer.foreground, blocks: 3, speed: 30.0)
+        gloopFlow.setupScrollingView(imageNamed: "flow_1", layer: Layer.foreground, blocks: 3, speed: 30.0,emitterNamed: "GloopFlow.sks")
         
         addChild(gloopFlow)
     }
@@ -325,6 +373,25 @@ extension GameScene : SKPhysicsContactDelegate{
                 score += level
                 dropsCollected += 1
                 checkForRemainingDrops()
+                let chomp = SKLabelNode(fontNamed: "Nosifer")
+                chomp.name = "chomp"
+                chomp.alpha = 0.0
+                chomp.fontSize = 22.0
+                chomp.text="gloop"
+                chomp.horizontalAlignmentMode = .center
+                chomp.verticalAlignmentMode = .bottom
+                chomp.position = CGPoint(x: player.position.x, y: player.frame.maxY+25)
+                chomp.zRotation = CGFloat.random(in: -0.15...0.15)
+                addChild(chomp)
+                
+                let fadeIn = SKAction.fadeAlpha(to: 1.0, duration: 0.05)
+                let fadeOut = SKAction.fadeAlpha(to: 0.0, duration: 0.45)
+                let moveUp = SKAction.moveBy(x: 0.0, y: 45, duration: 0.45)
+                let groupAction = SKAction.group([fadeOut,moveUp])
+                let removeFromParent = SKAction.removeFromParent()
+                let chompActions = SKAction.sequence([fadeIn,groupAction,removeFromParent])
+                
+                chomp.run(chompActions)
             }
             
         }
