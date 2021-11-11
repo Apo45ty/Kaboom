@@ -25,6 +25,16 @@ enum Layer : CGFloat {
 
 extension SKSpriteNode{
     
+    func endlessScroll(speed:TimeInterval){
+        let moveAction = SKAction.moveBy(x: -self.size.width, y: 0, duration: speed)
+        let resetAction = SKAction.moveBy(x: self.size.width, y: 0, duration: 0)
+        
+        let sequenceAction = SKAction.sequence([moveAction,resetAction])
+        let repeatAction = SKAction.repeatForever(sequenceAction)
+        
+        self.run(repeatAction)
+    }
+    
     func loadTextures(atlas: String,prefix:String,startsAt:Int,stopsAt:Int)->[SKTexture]{
         var textureArray=[SKTexture]()
         let textureAtlas = SKTextureAtlas(named: atlas)
@@ -62,5 +72,20 @@ extension SKScene{
             return 0.0
         }
         return convertPoint(fromView: CGPoint(x: 0.0, y: view.bounds.size.height)).y
+    }
+    
+    
+}
+extension SKNode{
+    func setupScrollingView(imageNamed name : String, layer : Layer,blocks:Int,speed:TimeInterval){
+        for i in 0..<blocks{
+            let spriteNode = SKSpriteNode(imageNamed: name)
+            spriteNode.anchorPoint = CGPoint.zero
+            spriteNode.position = CGPoint(x: CGFloat(i)*spriteNode.size.width, y: 0)
+            spriteNode.zPosition = layer.rawValue
+            spriteNode.name = name
+            spriteNode.endlessScroll(speed: speed)
+            addChild(spriteNode)
+        }
     }
 }

@@ -32,6 +32,7 @@ class GameScene: SKScene {
     var scoreLable : SKLabelNode = SKLabelNode()
     var levelLable : SKLabelNode = SKLabelNode()
     let musicAudioNode = SKAudioNode(fileNamed: "music.mp3")
+    let bubblesAudioNode = SKAudioNode(fileNamed: "bubbles.mp3")
     var gameInProgress = false
     var dropsExpected = 10
     var dropsCollected = 0
@@ -51,6 +52,7 @@ class GameScene: SKScene {
             self.musicAudioNode.run(SKAction.changeVolume(to: 0.75, duration: 2.0))
         })
         
+         
         
         let background = SKSpriteNode(imageNamed: "background_1")
         background.position = CGPoint(x: 0, y: 0)
@@ -76,7 +78,7 @@ class GameScene: SKScene {
         
         setupLabels()
         showMessage("Tap to Start game")
-       
+        setupGloopFlow()
     }
     
     // MARK:-TOUCH HANDELING
@@ -293,6 +295,17 @@ class GameScene: SKScene {
             [unowned self] in self.level+=1
         })
         self.spawnMultipleGloop()
+    }
+    //MARK:- Gloop Flow & Particle Effects
+    func setupGloopFlow(){
+        let gloopFlow = SKNode()
+        gloopFlow.name = "gloopFlow"
+        gloopFlow.zPosition = Layer.foreground.rawValue
+        gloopFlow.position = CGPoint(x: 0.0, y: -60.0)
+        
+        gloopFlow.setupScrollingView(imageNamed: "flow_1", layer: Layer.foreground, blocks: 3, speed: 30.0)
+        
+        addChild(gloopFlow)
     }
 }
 //MARK:-COLLLISION DETECTIO
